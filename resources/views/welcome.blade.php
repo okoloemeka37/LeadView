@@ -8,11 +8,97 @@
   <!-- Bootstrap CSS & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-  <script src="{{asset("script/index.js")}}" defer></script>
-  <script src="{{asset("script/location.js")}}" defer></script>
- <link rel="stylesheet" href="{{asset("style/index.css")}}">
+
 </head>
 <body>
+    <style>
+        
+    :root {
+      --accent: #2563eb;
+      --muted: #6b7280;
+      --card-bg: #ffffff;
+    }
+    body {
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,#f6f9ff 0,#fdfefe 100%);
+      color:#0b1220;
+      min-height:100vh;
+    }
+
+    /* Top */
+    .topbar { padding:18px 0; }
+    .brand {
+      display:flex; gap:.6rem; align-items:center; font-weight:700; color:var(--accent); font-size:1.05rem;
+    }
+
+    .controls .form-control { min-width: 180px; border-radius: 10px; }
+    .controls .btn { border-radius: 10px; }
+
+    /* Panel */
+    .panel {
+      background: var(--card-bg);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: 0 10px 30px rgba(37,99,235,0.06);
+      margin-bottom: 18px;
+    }
+
+    /* Table (desktop) */
+    table.hospital-table {
+      border-collapse: separate;
+      border-spacing: 0 10px;
+      width:100%;
+    }
+    table.hospital-table thead th {
+      font-weight:600; color:#0b1220; border-bottom:0;
+    }
+    table.hospital-table tbody tr {
+      background: linear-gradient(180deg,#fff,#fbfdff);
+      box-shadow: 0 8px 20px rgba(9,30,66,0.04);
+      border-radius: 10px;
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    table.hospital-table tbody tr:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 40px rgba(9,30,66,0.06);
+    }
+    table.hospital-table tbody td {
+      border:0; vertical-align:middle; padding:12px 14px;
+    }
+
+    .initials {
+      width:44px; height:44px; border-radius:10px;
+      display:inline-flex; align-items:center; justify-content:center;
+      font-weight:700; color:#fff;
+      background: linear-gradient(135deg,var(--accent), #1e40af);
+      margin-right:12px; font-size:.95rem;
+    }
+
+    /* Mobile list */
+    .mobile-list .list-group-item {
+      border:0; border-radius:12px; padding:12px;
+      background: linear-gradient(180deg,#fff,#fbfdff);
+      box-shadow: 0 8px 20px rgba(9,30,66,0.03);
+    }
+    .mobile-list .meta { font-size:.88rem; color:var(--muted) }
+    .type-pill {
+      padding:4px 8px; border-radius:999px;
+      font-weight:600; font-size:.79rem;
+      color:var(--accent); background: rgba(37,99,235,0.08);
+    }
+
+    /* Footer */
+    footer { text-align:center; color:var(--muted); padding:10px 0; font-size:.9rem; }
+
+    /* Responsive: show table on md+, list on xs */
+    .desktop-view { display:none; }
+    .mobile-view { display:block; }
+    @media(min-width:768px){
+      .desktop-view { display:block; }
+      .mobile-view { display:none; }
+    }
+  
+        </style>
 
   <div class="container topbar">
     <div class="d-flex justify-content-between align-items-center">
@@ -111,6 +197,110 @@
     </div>
   </main>
 
+
+  <script>
+
+    let locality;
+
+
+const search=document.querySelector("#search");
+search.addEventListener("keyup",()=>{
+const provider=document.querySelectorAll(".PROVIDER");
+provider.forEach((val)=>{
+
+    const inputVal=search.value.toLowerCase()
+const content=val.innerHTML.toLowerCase();
+
+if (content.indexOf(inputVal) == -1) {
+
+    val.closest("tr").className="d-none"
+
+}else{
+     val.closest("tr").classList.remove("d-none")
+
+
+}
+
+})
+
+        if (search.value.length === 0) {
+             const town=document.querySelectorAll(".TOWN");
+       town.forEach((val)=>{
+
+
+        const content=val.innerHTML.toLowerCase();
+
+        if (content.indexOf(locality) == -1) {
+
+    val.closest("tr").className="d-none"
+
+        }else{
+     val.closest("tr").classList.remove("d-none")
+
+
+        }
+
+        })
+        }
+
+})
+
+
+
+
+
+
+
+//location
+
+
+if (navigator.geolocation) {
+  
+    navigator.geolocation.getCurrentPosition((position)=>{
+        
+        const lat=position.coords.latitude;
+        const long=position.coords.longitude
+
+getLocation(lat,long)
+
+
+    }, (error) => {
+      console.error("Error getting location:", error);
+    }
+  );
+    
+
+}else {
+  console.log("Geolocation is not supported by this browser.");
+}
+
+
+
+async function getLocation(lat,long) {
+  await  fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${long}&localityLanguage=en`)
+    .then((resp)=>resp.json())
+    .then((data)=>{
+       locality=data['locality'].toLowerCase();
+       const town=document.querySelectorAll(".TOWN");
+       town.forEach((val)=>{
+
+
+        const content=val.innerHTML.toLowerCase();
+
+        if (content.indexOf(locality) == -1) {
+
+    val.closest("tr").className="d-none"
+
+        }else{
+     val.closest("tr").classList.remove("d-none")
+
+
+        }
+
+        })
+    })
+}
+  </script>
 
 </body>
 </html>
