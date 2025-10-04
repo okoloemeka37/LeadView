@@ -100,6 +100,25 @@
   
         </style>
 
+<div class="container mt-4">
+  <div class="alert alert-info shadow-sm border-0 rounded-3" role="alert">
+    <h5 class="alert-heading mb-2">
+      <i class="bi bi-card-checklist me-2"></i> Enter Your HMO Plan
+    </h5>
+    <p class="mb-3">
+      Please provide your HMO plan name below to continue.
+    </p>
+    <form class="d-flex align-items-center">
+      <input type="text" class="form-control me-2" placeholder="e.g. Leadway Health" required>
+      <button type="submit" class="btn btn-primary">
+        Submit
+      </button>
+    </form>
+  </div>
+</div>
+
+
+
   <div class="container topbar">
     <div class="d-flex justify-content-between align-items-center">
       <div class="brand">
