@@ -219,7 +219,7 @@
 
   <script>
 
-    let locality;
+    let locality; 
 
 
 const search=document.querySelector("#search");
