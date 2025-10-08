@@ -100,7 +100,7 @@
   
         </style>
 
-<div class="container mt-4">
+<div class="container mt-4 HD d-none">
   <div class="alert alert-info shadow-sm border-0 rounded-3" role="alert">
     <h5 class="alert-heading mb-2">
       <i class="bi bi-card-checklist me-2"></i> Enter Your HMO Plan
@@ -108,12 +108,12 @@
     <p class="mb-3">
       Please provide your HMO plan name below to continue.
     </p>
-    <form class="d-flex align-items-center">
-      <input type="text" class="form-control me-2" placeholder="e.g. Leadway Health" required>
-      <button type="submit" class="btn btn-primary">
+    <div class="d-flex align-items-center">
+      <input type="text" class="form-control me-2 hd-in" placeholder="e.g. Leadway Health" required>
+      <button class="btn btn-primary hd-btn">
         Submit
       </button>
-    </form>
+    </div>
   </div>
 </div>
 
@@ -282,7 +282,6 @@ if (navigator.geolocation) {
 
 getLocation(lat,long)
 
-
     }, (error) => {
       console.error("Error getting location:", error);
     }
@@ -300,6 +299,7 @@ async function getLocation(lat,long) {
     .then((resp)=>resp.json())
     .then((data)=>{
        locality=data['locality'].toLowerCase();
+       console.log(data)
        const town=document.querySelectorAll(".TOWN");
        town.forEach((val)=>{
 
@@ -319,6 +319,28 @@ async function getLocation(lat,long) {
         })
     })
 }
+
+
+
+//plan
+plan()
+function plan() {
+  window.onload=()=>{
+ const HD=   document.querySelector(".HD");
+ const planType=localStorage.getItem("plus");
+ if (planType) {
+  HD.classList.remove("d-none");
+ let btn=document.querySelector(".hd-btn");
+ btn.addEventListener("click",()=>{
+  const inputVal=document.querySelector(".hd-in").value;
+
+  localStorage.setItem("plan",inputVal);
+ })
+ }
+ 
+  }
+}
+
   </script>
 
 </body>
